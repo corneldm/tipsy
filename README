@@ -4,7 +4,10 @@ tipsy - Facebook-style tooltip plugin for jQuery
 
 == THIS FORK:
 
-Customized for use on CHALLONGE.com. Adds option for hiding the tip arrow and allowing mouse to hover the tip.
+Customized for use on http://challonge.com
+Adds option for hiding the tip arrow and allowing mouse to hover the tip.
+
+Demo (hover match scores): http://challonge.com/double_elim
 
 == DESCRIPTION:
 
