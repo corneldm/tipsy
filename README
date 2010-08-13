@@ -2,6 +2,10 @@ tipsy - Facebook-style tooltip plugin for jQuery
 	(c) 2008-2010 Jason Frame (jason@onehackoranother.com)
 	Released under The MIT License.
 
+== THIS FORK:
+
+Customized for use on CHALLONGE.com. Adds option for hiding the tip arrow and allowing mouse to hover the tip.
+
 == DESCRIPTION:
 
 tipsy is a simple jQuery plugin for generating Facebook-style tooltips.

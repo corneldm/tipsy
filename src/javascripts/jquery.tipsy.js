@@ -2,6 +2,9 @@
 // version 1.0.0a
 // (c) 2008-2010 jason frame [jason@onehackoranother.com]
 // released under the MIT license
+// Customized for CHALLONGE.com by dave cornelius
+
+var globalTipsyEnabled = true;
 
 (function($) {
     
@@ -15,13 +18,14 @@
     Tipsy.prototype = {
         show: function() {
             var title = this.getTitle();
-            if (title && this.enabled) {
+            if (title && this.enabled && globalTipsyEnabled) {
                 var $tip = this.tip();
                 
                 $tip.find('.tipsy-inner')[this.options.html ? 'html' : 'text'](title);
                 $tip[0].className = 'tipsy'; // reset classname in case of dynamic gravity
+                $tip[0].id = 'the_tipsy_div'; // may result in multiple tips with same id, but worth the hack for my app
                 $tip.remove().css({top: 0, left: 0, visibility: 'hidden', display: 'block'}).appendTo(document.body);
-                
+
                 var pos = $.extend({}, this.$element.offset(), {
                     width: this.$element[0].offsetWidth,
                     height: this.$element[0].offsetHeight
@@ -63,14 +67,20 @@
                 } else {
                     $tip.css({visibility: 'visible', opacity: this.options.opacity});
                 }
+
+                // mouse events for the tip (technically, the selectors should be div.tipsy, but ID is faster and suitable for my application)
+                $tip.mouseenter(function() { $('div#the_tipsy_div').addClass('inTip'); });
+                $tip.mouseleave(function() { $('div#the_tipsy_div').removeClass('inTip'); $('div#the_tipsy_div').hide(); });
             }
         },
         
         hide: function() {
-            if (this.options.fade) {
-                this.tip().stop().fadeOut(function() { $(this).remove(); });
-            } else {
-                this.tip().remove();
+            if (!this.options.allowTipHover || !$('#the_tipsy_div').hasClass('inTip')) {
+                if (this.options.fade) {
+                    this.tip().stop().fadeOut(function() { $(this).remove(); });
+                } else {
+                    this.tip().remove();
+                }
             }
         },
         
@@ -96,7 +106,12 @@
         
         tip: function() {
             if (!this.$tip) {
-                this.$tip = $('<div class="tipsy"></div>').html('<div class="tipsy-arrow"></div><div class="tipsy-inner"></div>');
+                if(this.options.hideTip) {
+                  this.$tip = $('<div class="tipsy"></div>').html('<div class="tipsy-inner"></div>');
+                }
+                else {
+                  this.$tip = $('<div class="tipsy"></div>').html('<div class="tipsy-arrow"></div><div class="tipsy-inner"></div>');
+                }
             }
             return this.$tip;
         },
@@ -180,7 +195,9 @@
         offset: 0,
         opacity: 0.8,
         title: 'title',
-        trigger: 'hover'
+        trigger: 'hover',
+        hideTip: false,
+        allowTipHover: false
     };
     
     // Overwrite this method to provide options on a per-element basis.
